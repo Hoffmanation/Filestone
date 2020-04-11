@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FileStone</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+
+</style>
+
+<link rel="icon" type="image/png" href="resources/images/favicon.ico"/>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script data-require="angular.js@1.0.x" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js" data-semver="1.0.8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-cookies.js"></script>
+<script src="resources/js/filestone.js"></script>
+<link href="resources/css/bootstrap.css" rel="stylesheet">
+<link href="resources/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="resources/js/bootstrap.min.js"></script>
+<script src="resources/js/ui-bootstrap-1.1.0.min.js"></script>
+
+<!--File Upload custom css-->
+<link rel="stylesheet" type="text/css" href="resources/css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="resources/css/demo.css" />
+<link rel="stylesheet" type="text/css" href="resources/css/component.css" />
+	  
+	
+<link rel="stylesheet" type="text/css" href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="resources/vendor/animate/animate.css">
+<link rel="stylesheet" type="text/css" href="resources/vendor/select2/select2.min.css">
+
+
+<link rel="stylesheet" type="text/css" href="resources/css/main.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="resources/css/style.css" />
+
+
+</head>
+<body>
+	
+ <div ng-app="fileStone" ng-controller="fileStoneController" data-ng-init="getAllFiles() ; getRepositoryInfo()">
+	<div class="limiter">
+			<div class="wrap-table100">
+			<div class="row">
+			
+			<div class="col-sm-8 pull-right">
+				
+				 <div class="table100 ver3  ">
+					<div class="table100-body js-pscroll">
+						<table>
+						<thead>
+								<tr data-ng-model="queryBy" class="row100 head">
+									<th class="cell100 column0"> Delete</th>
+									<th class="cell100 column1"> <a href="" data-ng-click="sortField = 'fileName' ; reverse = !reverse"  >File name</a></th>
+									<th class="cell100 column2"> <a href="" data-ng-click="sortField = 'type' ; reverse = !reverse"  >Type</a></th>
+									<th class="cell100 column3"> <a href="" data-ng-click="sortField = 'uploadTime' ; reverse = !reverse"  >Uploaded at</a></th>
+									<th class="cell100 column4"> <a href="" data-ng-click="sortField = 'description' ; reverse = !reverse"  >Description</a></th>
+									<th class="cell100 column5"> <a href="" data-ng-click="sortField = 'size' ; reverse = !reverse"  >Size in MB</a></th>
+									<th class="cell100 column6"> <a href="" data-ng-click="sortField = 'size' ; reverse = !reverse"  >Preview</a></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="row100 body" ng-repeat="file in printAllFiles | filter:query | orderBy:sortField:reverse">
+								 
+								    <td class="cell100 column0"><a href=""><i class="fa fa-trash" ng-click="deleteFile(file.id)"></i></a></td>
+									<td class="cell100 column1"><a href="/filestone/downloadFile/{{file.id}}">{{file.fileName}}</a></td>
+									<td class="cell100 column2">{{file.type}}</td>
+									<td class="cell100 column3">{{file.uploadTime}}</td>
+									<td class="cell100 column4">{{file.description}}</td>
+									<td class="cell100 column5">{{file.size}}</td>
+									<td class="cell100 column6"><a href="" ng-click="getPreviewTag(file.id)">See Preview</a></td>
+										<div id="myModal" class="modal">
+										  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+										  <span class="close" style="color: #00ad5f; font-size: 85px; opacity: 16.2;" >&times;</span>
+										  <div id="content" class="content-box"></div>
+										</div>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				</div>
+				
+				
+				<div class="col-sm-4 pull-left">
+						<div class="box_wraper">
+									<div class="upload box1">
+									<div class="login-form">
+										<form>
+											<div>
+												<h3>Welcome {{username}}</h3>
+												<h4> Repository info:</h4>
+												
+												        <p class="p-tag">{{fileQuantity}}</p>  
+												        <p class="p-tag">{{totalSize}}</p>  
+												        <p class="p-tag">{{lastLogin}}</p> 
+											</div>
+											<button class="btn btn-primary" type="button" ng-click="logout()">Logout</button>
+											<div class="upload-file-info" id="info"></div> 
+										</form>
+									</div>
+								</div>
+										
+								<div class="upload box2">
+										<h3>Upload file</h3>
+										  <div class="progress" id="progressBar">
+											  <div  class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" id="progress">
+											    
+											  
+											</div>
+										</div>
+										<div class="login-form">
+											<form>
+												<div>
+													<p class="p-tag">Description</p>
+													<input style="border-radius: 7.5px;" ng-model="description" type="text" class="describe" value="Write somthing about this file" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Write somthing about this file';}">
+												</div>
+													<input style="display:none;" type="file" id="file-3" name="file"  class="inputfile inputfile-3" data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus"  ng-file-model="files"  ng-file-select="onFileSelect($files)">
+													<label class="upload-file-label" for="file-3"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> 
+														<span id="chooseAfile" class="p-tag">Choose a file&hellip;</span>
+													</label>
+													<button class="btn" type="button" ng-click="uploadFile(description)" style="margin-top: 10%;">Upload</button>
+													<div class="upload-file-error" id="error">{{errorMessage}}</div> 
+											</form>
+										</div>
+								</div>
+								<div class="upload box3">
+									<div class="login-form">
+										<form>
+											<div>
+												<h3>Serch Your Repository</h3>
+												<input  style="border-radius: 7.5px;" ng-model="query" type="text" class="describe" >
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+					</div>
+					
+			    
+				
+			</div>
+	</div>
+</div>
+</div>
+
+	<script src="resources/js/custom-file-input.js"></script>
+	<script src="resources/js/main.js"></script>
+	<script src="resources/js/upload.js"></script>
+</body>
+</html> 

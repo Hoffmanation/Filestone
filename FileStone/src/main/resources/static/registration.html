@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="_csrf" content="${_csrf.token}"/>
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Create an account</title>
+    
+  <!--CSS Defenitions  -->
+    <link href="resources/css/blog-home.css" rel="stylesheet">
+    <link href="resources/css/bootstrap.css" rel="stylesheet">
+    <link href="resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="resources/css/common.css" rel="stylesheet">
+    <link href="resources/css/form.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    
+    <!--JS Defenitions  -->
+	<script data-require="angular.js@1.0.x" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js" data-semver="1.0.8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-cookies.js"></script>
+<!-- 	<script src="resources/js/bootstrap.js"></script> -->
+	<script src="resources/js/bootstrap.min.js"></script>
+	<script src="resources/js/jquery.js"></script>
+	<script src="resources/js/login.js"></script>
+	<script src="resources/js/ui-bootstrap-1.1.0.min.js"></script>
+
+ 
+</head>
+ 
+</head>
+
+<body>
+
+	<!--angularJS definition  -->
+	<div data-ng-app="loginApp" data-ng-controller="loginAppController">
+	
+	
+<div class="container">
+<img class="img-responsive" id="img" src="resources/images/filestoneLogo.png"  alt="">
+    <form class="form-signin" role="form" ng-submit="register()">
+        <h2 class="form-signin-heading">Create your account</h2>
+            <div class="form-group">
+                <input type="text" path="username" class="form-control" placeholder="Email" ng-model="username" autofocus="true"></input>
+                <span class="errorMessage">{{sizeUsername}}</span>
+                <span class="errorMessage">{{duplicateUsername}}</span>
+                <span class="errorMessage">{{emailNotValid}}</span>
+            </div>
+            <div class="form-group">
+                <input type="password" path="password" class="form-control" placeholder="Password" ng-model="password"></input>
+              	<span class="errorMessage">{{sizePassword}}</span>
+            </div>
+
+            <div class="form-group">
+                <input type="password" path="passwordConfirm" class="form-control" placeholder="Confirm your password" ng-model="passwordConfirm"></input>  
+                <span class="errorMessage">{{dontMatchPasswordConfirm}}</span> 
+                <span class="errorMessage">{{notEmpty}}</span> 
+            </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" >Submit</button>
+<div class="loader" ng-hide="loader"></div>
+
+    </form>
+</div>
+
+
+
+</body>
+</html>
