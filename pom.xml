@@ -188,6 +188,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>filestone</finalName>
 	</build>
 
 

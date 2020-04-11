@@ -1,142 +1,84 @@
-# Readme file
-development version of paygilant application
-## Environment
- - Ubuntu 18.04
+# Filestone Application
+This Java Spring-Boot application is a Media File 'Store And Display' Application.
+The end user have he's own account in which he can upload,delete and display almost any file type.
+Ther's also an option for retrieving a deleted file from the application recovery system 
+
+#Module Major Dependencies
+- Spring-Boot V1.5.10.RELEASE
+- Spring-Security V1.5.10.RELEASE
+- Spring-Date V2.0.0.RELEASE
+- Java-javax.mail V1.5.0-b01
+- Apache-commons-lang3 V3.1
+- Apache-commons-io V2.5
+
+#Server Specifications
+- Java Maven project
+- Spring-Boot
+- Persistence - Spring-JPA-repository
+- Security - Spring-Security
+
+
+#Client Specifications
+- AngularJs + angular-cookies - V1.0.8
+- jQuery,Bootstrap, Bootstrap-ui
+- HTML,CSS
+
+
+
+
+
+# Environment
+ - Ubuntu/Windows
  
-## Requirements
-- nodejs
-- docker
-- for development only - locally installed postgres client - `sudo apt install postgresql-client-common`
+# Requirements
+- JVM
+- DB connection (Configured as development env to local PostgreSql)
 
-## Directories
-- _docker - running docker with command line
-    - db/postgress - folder that holds docker mapped database
-- client - vuejs client application
-- server - nodejs/express server application
-    - controllers - modules for each route controller
-    - db - module for connection to postgress
-    - helpers - helper modules
-    - middleware - modules for route middleware
-    - migrations - used to make db structure
-    - models - modules&function to get data from postgres tables
-    - router - router/routes module definitions
-    - seeds - seeding demo data, users session risk_events
 
-## JSON Configuration File / jsonFile.json in server root folder
- - If there is property in fields it will be handled, else ignored. So if there is no configuration everything will be displayed as is.
- - Administrators see all fields
- - Empty objects are being deleted, unless handled in jsonFile.json
- - Example:
- 1. Response from database:
-     ```
-     {
-         score:123
-         amount:456
-         paymentMethod:'asdf'
-         address:{}
-     }
-  2. Handling with json:
-      ```
-     {
-     "fields": {
-         "score": {
-           "label": "score renamed",
-           "analyst": true, //show to analyst
-           "developer": false //hide to developer
-         },
-         "amount": {
-             "label": "Amount",
-             "analyst": false,
-             "developer": true
-           }
-     }
-  3. Response for analyst will be:
-     ```
-     {
-         "score renamed":"123"
-         "paymentMethod":"asdf"
-     }
-     
-  
 
-## Modify Database query
- - <a href="http://knexjs.org/">Knex</a> library is responsible for communication with database. 
- - Folder /server/models is responsible for querying database with functions.
-Example: `knex(table).select(...)`
- - Getting all risk events with `/server/models/riskEvents.js` method `getRiskEvents`.
-Select `knex(table).select('severity', 'score', 'timestamp', 'sessionid', 'requestid', 'userid', 'checkpoint', 'amount', 'currency', 'destination', 'status');`
-We are creating query with knex queryBuilder. For example take a look at jsdoc for `getRiskEvents`
- - Getting single risk event by requestId `/server/models/riskEvents.js` method `getRiskEventsByRequestId`, select `knex.select('json').table(table)`
+## Running up Environment
+- run maven install and retrieve the filestone.jar file
+- java - jar filestone.jar
 
-## Running up Environment without docker
-- server
-    - `cd server`
-    - `npm run dev` or
-    - `npm run start`
-- client
-    - `cd client`
-    - `npm run serve` or 
-    - `npm run build` 
+##Accessing Filestone application
+-http://localhost:8090/
 
-#### .env file example
-    #postgres db settings
-    DATABASE_HOST=127.0.0.1
-    DATABASE_USER=postgres
-    DATABASE_PASSWORD=postgres
-    DATABASE_NAME=postgres
-    DATABASE_SEARCH_PATH=public
-    #env development | production
-    NODE_ENV=development
-    #app port
-    PORT=3000
-    #used for generating jwt token
-    SECRET=s0m3su3rs3cr3tp4ssw0rd
-    #JWT token expiry, can be 7d, 60 or whatever in seconds
-    TOKEN_EXPIRES_IN=1d
-    #used for cors policy
-    FRONT_APP_DOMAIN=http://localhost:8080
-    #root of the server
-    JSON_CONFIGURATION_FILE_PATH='../jsonFile.json'
+
+#### .properties files explanation
+- .application.properties
     
-    ####EMAIL CONFIGURATION
-    EMAIL_FROM='someEmail@gmail.com'
-    # Gmail SMTP server Configuration
-    GMAIL_SERVICE_NAME=gmail
-    GMAIL_SERVICE_HOST=smtp.google.com
-    GMAIL_SERVICE_SECURE=false
-    GMAIL_SERVICE_PORT=587
-    GMAIL_USER_NAME=someEmail@gmail.com
-    GMAIL_USER_PASSWORD=someEmailGmailPassword
+	#MultipartFile Configuration
+	spring.http.multipart.max-file-size= what will be the maximum allowed file size to be upload by any user.
+	spring.http.multipart.max-request-size= what will be the maximum allowed request size to be upload by any user.
+	spring.http.multipart.enabled= can enable or disable the multipart file spring bean from the system.
+	spring.http.multipart.location= what will be the location of the multipart file to be copy.
+	
+	#Support For file recovery system
+	filestone.file.recovery= can enable or disable the application file recovery system
+	filestone.file.recovery.timelimit = what will be the time limit which the recovery system files will be stored.	
+	
+	server.port= what will be the port of the application
+	
+	
+- .email.properties
     
-    # SMTP service configuration
-    SMTP_SERVICE_HOST=
-    SMTP_SERVICE_SECURE=
-    SMTP_SERVICE_PORT=
-    SMTP_USER_NAME=
-    SMTP_USER_PASSWORD=
+	#Email credentials
+	username= the username for your email account
+	password= the password  for your email account	
+	
+- .messages.properties
     
-### Docker Environment
-We can run application via two scripts for development purposes.
-- in _docker folder ./start.sh - starts docker without docker-compose, configuration is in command line parameters
-- in root of the project ./start.sh - starts docker containers with docker-compose, configuration is in docker-compose.yaml file in root of the project.
-- there is Dockerfile in server/ and client/ dir that is used with docker-compose process
+	#Messages for front end user
+	not.empty=* All fields are required.
+	size.username= *Username have to be between 6 and 32 characters.
+	duplicate.username= *Someone already has that username.
+	size.password= *Password should be at least 8 characters.
+	dont.match.passwordConfirm= *These passwords don't match.
+	email.not.valid= *This email is not valid
+	
+	#Can be changed as you wish	
+    
 
 
-### Some useful commands for development speedup
-#### postgres commands
-    \q | Exit psql connection
-    \c | Connect to a new database
-    \dt | List all tables
-    \du | List all roles
-    \list | List databases
-    \d table_name | describes table_name
-##### running commands into docker container
-    docker exec -it docker-container-name some-command-line
-##### example: connecting to `pg-db-server` docker instance 1
-    docker exec -it pg-db-server psql -h localhost -U postgres -d postgres
-##### example2: connecting to docker container as root user:
-    docker exec -u root -t -i pg-node-server /bin/bash
-##### example3: running up docker with file docker-compose.yaml, building it, recreating it, and getting docker up 
-    docker-compose -f docker-compose.yaml up -d --force-recreate --build
-##### example4: listing docker containers:
-    docker ps
+# Contact
+- For any questions you can send a mail to orenhoffman1777@gmail.com
