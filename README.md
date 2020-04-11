@@ -40,9 +40,9 @@ Ther's also an option for retrieving a deleted file from the application recover
 ## Accessing Filestone application
 -http://localhost:8090/
 
+# .properties files explanation
 
-#### .properties files explanation
-- .application.properties
+#### .application.properties
     
 	#MultipartFile Configuration
 	spring.http.multipart.max-file-size= what will be the maximum allowed file size to be upload by any user.
@@ -57,13 +57,13 @@ Ther's also an option for retrieving a deleted file from the application recover
 	server.port= what will be the port of the application
 	
 	
-- .email.properties
+#### .email.properties
     
 	#Email credentials
 	username= the username for your email account
 	password= the password  for your email account	
 	
-- .messages.properties
+#### .messages.properties
     
 	#Messages for front end user
 	not.empty=* All fields are required.
