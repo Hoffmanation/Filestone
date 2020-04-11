@@ -37,7 +37,7 @@ Ther's also an option for retrieving a deleted file from the application recover
 - run maven install and retrieve the filestone.jar file
 - java - jar filestone.jar
 
-##Accessing Filestone application
+## Accessing Filestone application
 -http://localhost:8090/
 
 
