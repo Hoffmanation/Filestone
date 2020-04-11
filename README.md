@@ -75,45 +75,6 @@ Ther's also an option for retrieving a deleted file from the application recover
 	
 	#Can be changed as you wish	
 	
-	
-#### .env file example
-    #postgres db settings
-    DATABASE_HOST=127.0.0.1
-    DATABASE_USER=postgres
-    DATABASE_PASSWORD=postgres
-    DATABASE_NAME=postgres
-    DATABASE_SEARCH_PATH=public
-    #env development | production
-    NODE_ENV=development
-    #app port
-    PORT=3000
-    #used for generating jwt token
-    SECRET=s0m3su3rs3cr3tp4ssw0rd
-    #JWT token expiry, can be 7d, 60 or whatever in seconds
-    TOKEN_EXPIRES_IN=1d
-    #used for cors policy
-    FRONT_APP_DOMAIN=http://localhost:8080
-    #root of the server
-    JSON_CONFIGURATION_FILE_PATH='../jsonFile.json'
-    
-    ####EMAIL CONFIGURATION
-    EMAIL_FROM='someEmail@gmail.com'
-    # Gmail SMTP server Configuration
-    GMAIL_SERVICE_NAME=gmail
-    GMAIL_SERVICE_HOST=smtp.google.com
-    GMAIL_SERVICE_SECURE=false
-    GMAIL_SERVICE_PORT=587
-    GMAIL_USER_NAME=someEmail@gmail.com
-    GMAIL_USER_PASSWORD=someEmailGmailPassword
-    
-    # SMTP service configuration
-    SMTP_SERVICE_HOST=
-    SMTP_SERVICE_SECURE=
-    SMTP_SERVICE_PORT=
-    SMTP_USER_NAME=
-    SMTP_USER_PASSWORD=	
-    
-
 
 # Contact
 - For any questions you can send a mail to orenhoffman1777@gmail.com
