@@ -41,8 +41,7 @@
         var modal = document.getElementById('myModal');
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function() { 
-            modal.style.display = "none";
-            jQuery('.modal-backdrop').css("position", "inherit");
+        	jQuery('#myModal').modal('hide	');
     		var contentToRemove = angular.element(document.querySelector("#content").firstChild).remove();
         }
         
@@ -172,9 +171,8 @@
 		
 		//Get requested html tag (already filled with content) from server.
 		$scope.getPreviewTag = function(id){
-			$scope.hideLoader();
-			$scope.showFilePreview ();
-		    
+			$scope.showLoader();
+			 $scope.showFilePreview();
 			$http({
 				method : 'GET',
 				url : $scope.restUrl + "getPreviewTag/"+id ,
@@ -187,6 +185,7 @@
 					$scope.displayContents = response.data.entity;
 					$scope.injectFileContant($scope.displayContents);
 			        $scope.hideLoader(); 
+			       
 			});	
 		}
 		

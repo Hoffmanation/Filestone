@@ -1,5 +1,9 @@
 package com.filestone.service.impl;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Properties;
 
@@ -9,6 +13,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +21,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import com.filestone.entity.Users;
+import com.filestone.pojo.MailMessageRequest;
 import com.filestone.service.UserService;
 import com.filestone.util.AppUtil;
 import com.filestone.util.Constants;
-import com.filestone.entity.Users;
-import com.filestone.pojo.MailMessageRequest;
 
 /**
  * This Service class implements Email Messaging services to be use by the 'Forgot my password flow'.
@@ -50,10 +55,10 @@ public class EmailServiceImpl {
 	/*
 	 * Retrieving Environment Variables for email credentials
 	 */
-	@Value("${username}")
-	private String username;
-	@Value("${password}")
-	private String password;
+	@Value("${emailUsername}")
+	private String emailUsername;
+	@Value("${emailPassword}")
+	private String emailPassword;
 
 
 /**
@@ -78,12 +83,12 @@ public class EmailServiceImpl {
 
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username,password);
+				return new PasswordAuthentication(emailUsername,emailPassword);
 			}
 		});
 		try {
 			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(username, "Filestone Application"));
+			message.setFrom(new InternetAddress(emailUsername, "Filestone Application"));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(messageRequest.getSentTo()));
 			message.setSubject(messageRequest.getSubject());
 			message.setText("swswsw");
@@ -106,19 +111,16 @@ public class EmailServiceImpl {
  * @param sendConformationMailTo
  * @return {@link MailMessageRequest}
  */
-	public MailMessageRequest prepareResetPasswordMail(String sendConformationMailTo) {
+	public MailMessageRequest prepareResetPasswordMail(String sendConformationMailTo ,HttpServletRequest req) {
 		Users temp = userStub.findByUsername(sendConformationMailTo);
 		if (temp == null) {
 			return null;
 		}
 		//Generate Access-Token
 		String token = AppUtil.generateSaltString();
+		String body = createReasetPasswordTemplate(req,token,sendConformationMailTo) ;
 		//Inject the 'reset.html' end-point and the Access-Token in the URL and Create the template to be sent
-		MailMessageRequest message = new MailMessageRequest(sendConformationMailTo,
-				"Reset password for your Filestone account",
-				"<h1>To reset your password please click <a href=\"" + Constants.BASE_URL + "reset.html?" + token + "?"
-						+ sendConformationMailTo + "\">here</a></h1>",
-				"donotrelplay@filestone.com");
+		MailMessageRequest message = new MailMessageRequest(sendConformationMailTo,"Reset password for your Filestone account",body,"donotrelplay@filestone.com");
 		//Register the Access-Token
 		accessTokenService.addAccessToken(sendConformationMailTo, token);
 		//Send Mail to user
@@ -131,15 +133,30 @@ public class EmailServiceImpl {
 	 * @param messageRequest
 	 * @return {@link Boolean}
 	 */
-	public boolean sendResetPasswordMail(String sendConformationMailTo) {
-		MailMessageRequest message = prepareResetPasswordMail(sendConformationMailTo) ;
+	public boolean sendResetPasswordMail(String sendConformationMailTo ,HttpServletRequest req) {
+		MailMessageRequest message = prepareResetPasswordMail(sendConformationMailTo,req) ;
 		if (message == null) {
 			return false ;
 		}
 		return sendMail(message);
 	}
 
-
+private String createReasetPasswordTemplate(HttpServletRequest req, String token ,String sendConformationMailTo)   {
+	
+		String urlToInject =null;
+		String content = null;
+	try {
+		InetAddress inetAddress = InetAddress.getLocalHost();
+		System.out.println("IP Address:- " + inetAddress.getHostAddress());
+		System.out.println("Host Name:- " + inetAddress.getHostName());
+		 urlToInject = "http://" + inetAddress.getHostAddress() + ":" + req.getLocalPort() + "/reset.html?token=" + token+ "&email=" + sendConformationMailTo;
+		content = new String ( Files.readAllBytes( Paths.get(ClassLoader.getSystemResource("static/resources/templates/reset-password-mail.html").toURI())) );
+	} catch (Exception e) {
+		log.error("Faild to inject \"Reset Password URL\" in Rest password Email template" , e);
+	}
+	   content = content.replace(Constants.RESET_PASS_REPLACE_URL, urlToInject) ;
+	   return content;
+}
 
 
 }

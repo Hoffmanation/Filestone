@@ -8,13 +8,13 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.filestone.entity.UserDetail;
+import com.filestone.pojo.ResetPasswordRequest;
 import com.filestone.service.manager.UserServiceManager;
 
 /**
@@ -40,11 +40,11 @@ public class FilestoneAppController {
 	@RequestMapping(path = "filestone/login", method = RequestMethod.POST)
 	public Response login(@RequestBody UserDetail userDetail, HttpSession session) {
 		return userServiceManager.login(userDetail, session);
-	}
+	} 
 	
-	@RequestMapping(path = "filestone/updatePassword/{token}/{email}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-	public Response updatePassword(@RequestBody String newPassword , @PathVariable("token") String token,@PathVariable("email") String email,@Context HttpServletRequest req, HttpSession session) {
-		return userServiceManager.updatePassword(newPassword, token, email, req, session);
+	@RequestMapping(path = "filestone/updatePassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+	public Response updatePassword(@RequestBody ResetPasswordRequest ResetPasswordRequest ,@Context HttpServletRequest req, HttpSession session) {
+		return userServiceManager.updatePassword(ResetPasswordRequest, req, session);
 	}
 	
 	

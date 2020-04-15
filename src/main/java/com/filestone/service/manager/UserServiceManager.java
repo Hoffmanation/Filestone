@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import com.filestone.entity.Users;
 import com.filestone.pojo.LoginError;
 import com.filestone.pojo.Message;
 import com.filestone.pojo.RepositoryInfo;
+import com.filestone.pojo.ResetPasswordRequest;
 import com.filestone.service.SecurityService;
 import com.filestone.service.UserService;
 import com.filestone.service.impl.AccessTokenServiceImpl;
@@ -50,6 +52,13 @@ public class UserServiceManager {
 	@Autowired
 	private AppUtil appUtil;
 
+	/**
+	 * Registration B-L method
+	 * @param userDetail
+	 * @param bindingResult
+	 * @param session
+	 * @return {@link Response}
+	 */
 	public Response registration(UserDetail userDetail, BindingResult bindingResult, HttpSession session) {
 		userValidator.validate(userDetail, bindingResult);
 		if (bindingResult.hasErrors()) {
@@ -65,6 +74,12 @@ public class UserServiceManager {
 		return Response.status(200).entity(Status.OK.getReasonPhrase()).build();
 	}
 
+	/**
+	 * Login B-L method
+	 * @param userDetail
+	 * @param session
+	 * @return {@link Response}
+	 */
 	public Response login(UserDetail userDetail, HttpSession session) {
 		if (securityService.autologin(userDetail.getUsername(), userDetail.getPassword())) {
 			Users user = userService.loginUser(userDetail);
@@ -74,17 +89,32 @@ public class UserServiceManager {
 		return Response.status(401).entity("*Username or password are incorrect.").build();
 	}
 
-	public Response updatePassword(String newPassword, String token, String email, HttpServletRequest req,
-			HttpSession session) {
-		Users user = userService.findByUsername(email);
-		if (accessTokenService.isEligible(user, token)) {
-			user.setPassword(newPassword);
+	/**
+	 * Update Password B-L method - (A part of the 'Forgot My Password' Business Flow)
+	 * @param ResetPasswordRequest
+	 * @param req
+	 * @param session
+	 * @return {@link Response}
+	 */
+	public Response updatePassword(ResetPasswordRequest resetPasswordRequest, HttpServletRequest req,HttpSession session) {
+		Users user = userService.findByUsername(resetPasswordRequest.getEmail());
+		if ( StringUtils.isNotEmpty(resetPasswordRequest.getNewPassword())  && resetPasswordRequest.getNewPassword().length() < 6 || 
+				resetPasswordRequest.getNewPassword().length() > 30) {
+			return Response.status(401).entity(new Message("*Password should be at least 8 characters.")).build();
+		}
+		if (accessTokenService.isEligible(user, resetPasswordRequest.getToken())) {
+			user.setPassword(securityService.encodePassword(resetPasswordRequest.getNewPassword()));
 			userService.createUser(user);
 			return Response.status(200).entity(new Message("Your password has been rest successfully")).build();
 		}
-		return Response.status(200).entity(new Message("*Request not authorized")).build();
+		return Response.status(401).entity(new Message("*Request not authorized")).build();
 	}
 
+	/**
+	 * Logout B-L method
+	 * @param session
+	 * @return {@link Response}
+	 */
 	public Response logout(HttpSession session) {
 		Users user = (Users) session.getAttribute(Constants.USER_LOGIN);
 		userService.logout(user);

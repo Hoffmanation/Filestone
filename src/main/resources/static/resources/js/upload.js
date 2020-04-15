@@ -1,3 +1,4 @@
+//File reader Factory Service - provide file's upload-progress and data in real time
 (function (module) {
      
     var fileReader = function ($q, $log) {

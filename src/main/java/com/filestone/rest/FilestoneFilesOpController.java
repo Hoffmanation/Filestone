@@ -81,8 +81,8 @@ public class FilestoneFilesOpController {
 
 	@RequestMapping(value = "filestone/forgotMyPassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
 	public Response sendConformationMailTo(@RequestBody String sendConformationMailTo, @Context HttpServletResponse res,
-			HttpSession session) {
-		return filestoneServiceManager.sendResetPasswordMail(sendConformationMailTo, res, session);
+			HttpServletRequest req ,HttpSession session) {
+		return filestoneServiceManager.sendResetPasswordMail(sendConformationMailTo, res,req, session);
 
 	}
 

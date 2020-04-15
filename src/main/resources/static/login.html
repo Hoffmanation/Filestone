@@ -47,7 +47,7 @@
             <input name="password" type="password" class="form-control" placeholder="Password" ng-model="password"/>
             <span class="errorMessage">{{loginMessage}}</span>
             <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="login()">Log In</button>
-            <h4 class="text-center"><a href="registration.html">Create an account</a></h4>
+            <h4 class="text-center"><a href="/registration.html" ng-click="goTo('registration')">Create an account</a></h4>
             <h4 class="text-center" data-toggle="modal" data-target="#myModal"><a href="" ng-click="cleanErrors()">Forgot my password</a></h4>
         </div>
         <div class="loader" ng-hide="loader"></div>
@@ -63,7 +63,7 @@
       <div class="modal-content"  style="background-color: #86be1f;">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Reset Password</h4>
+          <h4 class="modal-title" style="color: aliceblue;">Reset Password</h4>
         </div>
         <div class="modal-body">
          <input type="text" path="passwordConfirm" class="form-control" placeholder="E-mail" ng-model="email"></input> 

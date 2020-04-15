@@ -10,9 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.filestone.entity.FileInfo;
 import com.filestone.service.SecurityService;
 
 
@@ -33,6 +33,9 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private  BCryptPasswordEncoder encoder ;
 	
 
 /**
@@ -79,5 +82,15 @@ public class SecurityServiceImpl implements SecurityService {
 			logger.error("Access to FileStone App was denied, Credentials that was given : User Name: "+ username + ", Password: " + password);
 		}
 		return false;
+	}
+	
+	/**
+	 * Method will encode user's password after "reset-password" flow 
+	 * @param rawPassword
+	 * @return {@link String}
+	 */
+	@Override
+	public String encodePassword(String rawPassword) {
+		return  encoder.encode(rawPassword)  ;
 	}
 }

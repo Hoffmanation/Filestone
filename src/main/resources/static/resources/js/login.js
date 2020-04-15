@@ -1,7 +1,17 @@
+//Main login angularJs module
 var loginApp = angular.module("loginApp", [ 'ui.bootstrap' ,'ngCookies' ])
+
+//$location configuration to work in html5-Mode
+loginApp.config(function($locationProvider) {
+	  $locationProvider.html5Mode(true);
+	});
+
+//Main login angularJs module-controller
 loginApp.controller("loginAppController",function($scope, $http, $rootScope, $window,$location,$cookies) {
 
-		// Var's
+		/**
+		 * Global variables
+		 */
 		$scope.restUrl = $location.protocol() + '://'+ $location.host() +':'+  $location.port()+"/filestone" ;
 		var token = $cookies['XSRF-TOKEN'];
 		$scope.dupPass="";
@@ -9,16 +19,36 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 		$scope.nameNotEnChars="";
 		$scope.passDontMatch="";
 		$scope.passNotEnChars="";
+		$scope.resetPasswrodError="";
+		$scope.resetPasswrodResponse="";
 		$scope.loader = true ;
 					
 					
-		//Functions		
+		/**
+		 * Functions 
+		 */	
 	    $scope.cleanErrors = function() {
 	    	$scope.email = "" ;
 	    	$scope.forgotMyPasswordError="";
+			$scope.resetPasswrodError="";
+			$scope.resetPasswrodResponse="";
+			
+			$scope.dupPass="";
+			$scope.emptyField="";
+			$scope.nameNotEnChars="";
+			$scope.passDontMatch="";
+			$scope.passNotEnChars="";
+			$scope.resetPasswrodError="";
+			$scope.resetPasswrodResponse="";
 		}
-				    
-		$scope.login = function() {	
+	    
+	    $scope.goTo = function(page) {
+	    	$window.location.href = '/' + page+'.html';
+	    }
+		
+	    //Login 
+		$scope.login = function() {
+			 $scope.cleanErrors();
 			$scope.loader = false ;
 			$scope.userDetails = {
 					username : $scope.username,
@@ -53,7 +83,9 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 		 };
 									
 
+		 //Registration
 		$scope.register = function() {
+			$scope.cleanErrors();
 			$scope.loader = false ;
 			$scope.userDetails = {
 				username : $scope.username,
@@ -93,6 +125,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 		};
 
 		
+		//Forgot My Password - will send user 'Reset password' email 
 		 $scope.forgotMyPassword = function(email) {
 			$http({
 			  method : "post",
@@ -109,27 +142,44 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 			  $scope.myWelcome = response.statusText;
 			});
 		}
-				 
-		 $scope.updateMyPassword = function(newPassword) {
-			 var passToken = window.location.search;
-			 passToken = passToken.replace("?", '').split("?"); 
+		
+		 
+		 //Update New password from 'Reset.html' page
+		 $scope.updateMyPassword = function(passwordToUpdate) {
+			 $scope.cleanErrors()
+			 $scope.loader = false ;
+			 $scope.resetPasswordRequest = {
+						newPassword: passwordToUpdate,	 
+						token: $location.search().token,
+						email: $location.search().email
+					 }
 			$http({
-			  method : "post",
-			  url : $scope.restUrl +"/updatePassword/"+ passToken[0]+"/"+passToken[1]+"/",
-			  data: newPassword,
+			  method : "POST",
+			  url : $scope.restUrl +"/updatePassword",
+			  data: $scope.resetPasswordRequest,
 				headers : {
 					'X-CSRF-TOKEN' : token,
 					'Content-Type' : 'application/json',
 					'Accept' : 'application/json'
 				}
 			}).then(function mySuccess(response) {
-			  $scope.updatedPassword = response.data.entity.message
+				$scope.loader = true ;
+				if (response.data.status== 200) {
+					$scope.resetPasswrodResponse = response.data.entity.message
+				}
+				else if(response.data.status == 401){
+					$scope.resetPasswrodError = response.data.entity.message
+				}
 			}, function myError(response) {
-			  $scope.updatedPassword = response.data.entity.message
+				$scope.loader = true ;
+				if (response.data.status == 200) {
+					$scope.resetPasswrodResponse = response.data.entity.message
+				}
+				else if(response.data.status == 401){
+					$scope.resetPasswrodError = response.data.entity.message
+				}
 			});
 		}
-
-
 });
 
 

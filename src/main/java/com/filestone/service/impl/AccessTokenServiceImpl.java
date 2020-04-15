@@ -3,6 +3,7 @@ package com.filestone.service.impl;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.filestone.entity.FileInfo;
@@ -17,6 +18,8 @@ import com.filestone.entity.Users;
  */
 @Component
 public class AccessTokenServiceImpl {
+	private static final Logger log = Logger.getLogger(AccessTokenServiceImpl.class.getSimpleName());
+
 
 	//Access-Token registry
 	Map<String, String> tokenRegister ;
@@ -26,17 +29,17 @@ public class AccessTokenServiceImpl {
 	}
 	
 	/**
-	 * Method will validate if user have the same Access-Token that was send to hem in the 'Reset your password' mail
+	 * Method will validate if user have the same Access-Token that was send to him in the 'Reset your password' mail
 	 * @param user
 	 * @param token
 	 * @return {@link Boolean}
-	 */
+		 */
 	public boolean isEligible(Users user, String token) {
 		try {
 			String tokenInMap = tokenRegister.get(user.getUsername());
 			return token.equals(tokenInMap);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Fiald to resolve Access-Token from reporitory, Data that was passed to Cotroller: Username: "+ user.getUsername() + ", Access-Token: " + token );
 		}
 		return false;
 	}

@@ -139,11 +139,11 @@ public class FilestoneServiceManager {
 		return Response.status(200).entity(Status.OK.getReasonPhrase()).build();
 	}
 
-	public Response sendResetPasswordMail(String sendConformationMailTo, HttpServletResponse res, HttpSession session) {
+	public Response sendResetPasswordMail(String sendConformationMailTo, HttpServletResponse res, HttpServletRequest req,HttpSession session) {
 		if (!appUtil.emailValidator(sendConformationMailTo)) {
 			return Response.status(200).entity(new Message("*Plaese enter a valid email address")).build();
 		}
-		if (mailService.sendResetPasswordMail(sendConformationMailTo)) {
+		if (mailService.sendResetPasswordMail(sendConformationMailTo,req)) {
 			return Response.status(200).entity(new Message("A confirmation link has been sent to your email address"))
 					.build();
 		}
