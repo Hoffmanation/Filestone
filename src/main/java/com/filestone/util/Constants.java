@@ -10,8 +10,8 @@ public interface Constants {
 
 	final String FILESTONE_APP_RESOURCE_FOLDER = "filestoneData";
 	
-	final String BASE_FILES_FOLDER = System.getProperty("user.home") +"\\"+FILESTONE_APP_RESOURCE_FOLDER+"\\";
-	final String RECOVERY_FILES_FOLDER =System.getProperty("user.home") +"\\"+FILESTONE_APP_RESOURCE_FOLDER+"\\recoveryFiles";
+	final String BASE_FILES_FOLDER = System.getProperty("user.home") +"/"+FILESTONE_APP_RESOURCE_FOLDER+"/";
+	final String RECOVERY_FILES_FOLDER =System.getProperty("user.home") +"/"+FILESTONE_APP_RESOURCE_FOLDER+"/recoveryFiles";
 	final String LOGOUT_PAGE = "/login.html";
 	final String USER_LOGIN = "user";
 	final String RESET_PASS_REPLACE_URL = "inject-reset-password-url";

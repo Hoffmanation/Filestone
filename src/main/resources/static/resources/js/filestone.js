@@ -41,7 +41,7 @@
         var modal = document.getElementById('myModal');
         var span = document.getElementsByClassName("close")[0];
         span.onclick = function() { 
-        	jQuery('#myModal').modal('hide	');
+        	jQuery('#myModal').modal('hide');
     		var contentToRemove = angular.element(document.querySelector("#content").firstChild).remove();
         }
         

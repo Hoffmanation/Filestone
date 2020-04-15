@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public boolean logout(Users user) {
 		Users tempUser = getUserById(user.getId()) ;
 		List<UserDetail> detailsList = tempUser .getDetails();

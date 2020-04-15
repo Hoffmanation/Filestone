@@ -13,6 +13,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 		 * Global variables
 		 */
 		$scope.restUrl = $location.protocol() + '://'+ $location.host() +':'+  $location.port()+"/filestone" ;
+		$scope.url = $location.protocol() + '://'+ $location.host() +':'+  $location.port() ;
 		var token = $cookies['XSRF-TOKEN'];
 		$scope.dupPass="";
 		$scope.emptyField="";
@@ -91,6 +92,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 				username : $scope.username,
 				password : $scope.password,
 				passwordConfirm : $scope.passwordConfirm,
+				endpoint : $scope.url,
 			}
 			
 			$http({

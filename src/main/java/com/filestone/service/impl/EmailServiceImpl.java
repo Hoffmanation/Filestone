@@ -1,7 +1,7 @@
 package com.filestone.service.impl;
 
+import java.io.InputStream;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -26,6 +26,7 @@ import com.filestone.pojo.MailMessageRequest;
 import com.filestone.service.UserService;
 import com.filestone.util.AppUtil;
 import com.filestone.util.Constants;
+import com.filestone.util.FileUploadUtil;
 
 /**
  * This Service class implements Email Messaging services to be use by the 'Forgot my password flow'.
@@ -118,7 +119,7 @@ public class EmailServiceImpl {
 		}
 		//Generate Access-Token
 		String token = AppUtil.generateSaltString();
-		String body = createReasetPasswordTemplate(req,token,sendConformationMailTo) ;
+		String body = createResetPasswordTemplate(req,token,sendConformationMailTo) ;
 		//Inject the 'reset.html' end-point and the Access-Token in the URL and Create the template to be sent
 		MailMessageRequest message = new MailMessageRequest(sendConformationMailTo,"Reset password for your Filestone account",body,"donotrelplay@filestone.com");
 		//Register the Access-Token
@@ -141,16 +142,22 @@ public class EmailServiceImpl {
 		return sendMail(message);
 	}
 
-private String createReasetPasswordTemplate(HttpServletRequest req, String token ,String sendConformationMailTo)   {
 	
+	/**
+	 * Method will create the 'Reset Password Mail' email-template
+	 * @param req
+	 * @param token
+	 * @param sendConformationMailTo
+	 * @return {@link String}
+	 */
+private String createResetPasswordTemplate(HttpServletRequest req, String token ,String sendConformationMailTo)   {
+		String host = "http"+FileUploadUtil.getMachineHostName(req);
 		String urlToInject =null;
 		String content = null;
 	try {
-		InetAddress inetAddress = InetAddress.getLocalHost();
-		System.out.println("IP Address:- " + inetAddress.getHostAddress());
-		System.out.println("Host Name:- " + inetAddress.getHostName());
-		 urlToInject = "http://" + inetAddress.getHostAddress() + ":" + req.getLocalPort() + "/reset.html?token=" + token+ "&email=" + sendConformationMailTo;
-		content = new String ( Files.readAllBytes( Paths.get(ClassLoader.getSystemResource("static/resources/templates/reset-password-mail.html").toURI())) );
+		 urlToInject = host+ "/reset.html?token=" + token+ "&email=" + sendConformationMailTo;
+		 InputStream is = getClass().getResourceAsStream("/reset-password-mail.html");
+		 content =FileUploadUtil.getEmailTemplateFromClasspath(is) ;
 	} catch (Exception e) {
 		log.error("Faild to inject \"Reset Password URL\" in Rest password Email template" , e);
 	}
