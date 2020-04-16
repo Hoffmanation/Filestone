@@ -19,7 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("com.filestone")
 //Declaring where the Spring-IOC-Container will be scanning for the DAO-Persistence layer to be used by JPA-Spring Data
 @EnableJpaRepositories({ "com.filestone" })
-public class UploadFilesApplication {
+public class FilestoneApplication {
 
 	/**
 	 * Spring-Boot Main class
@@ -27,6 +27,6 @@ public class UploadFilesApplication {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(UploadFilesApplication.class, args);
+		SpringApplication.run(FilestoneApplication.class, args);
 	}
 }
