@@ -3,6 +3,10 @@ This Java Spring-Boot application is a Media File 'Store And Display' Applicatio
 The end user have he's own account in which he can upload,delete and display almost any file type.
 Ther's also an option for retrieving a deleted file from the application recovery system 
 
+## Git Branches
+- master - For Deploying a Spring-Boot application as a Tomcat war/ Embedded Tomcat jar  files
+- filstone-wildfly - For deploying a Spring-Boot application as a Wildfly/Jboss (or any JEE application server) war file
+
 # Module Major Dependencies
 - Spring-Boot V1.5.10.RELEASE
 - Spring-Security V1.5.10.RELEASE
