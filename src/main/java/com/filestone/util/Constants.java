@@ -15,6 +15,7 @@ public interface Constants {
 	final String LOGOUT_PAGE = "/login.html";
 	final String USER_LOGIN = "user";
 	final String RESET_PASS_REPLACE_URL = "inject-reset-password-url";
+	final String CANNOT_FIND_MEDIA_RESOURCE = "We couldn't find the requested media resource";
 
 	//Media Type Arrays
 	String[] imageFileExtention = { "svg", "png", "bpg", "bmp", "jpeg", "imp", "jbg", "jpe", "jpg", "mac","GIF", };

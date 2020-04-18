@@ -24,6 +24,16 @@ public abstract class FileUploadUtil {
 	
 	
 	/**
+	 * Method will validate if the media file requested to displayed by the user is exist or not
+	 * @param path
+	 * @return {@link String}
+	 */
+	public static boolean isMediaResourceExist(String path) {
+		File tmpDir = new File(path);
+		return tmpDir.exists();
+	}
+	
+	/**
 	 * Method will resolve the filestone application Machine Host Name
 	 * @param request
 	 * @return {@link String}

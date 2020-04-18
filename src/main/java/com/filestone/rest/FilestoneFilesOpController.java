@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.filestone.entity.FileInfo;
+import com.filestone.handler.FilestoneMediaFileException;
 import com.filestone.pojo.RepositoryInfo;
 import com.filestone.service.manager.FilestoneServiceManager;
 
@@ -93,8 +94,7 @@ public class FilestoneFilesOpController {
 	}
 
 	@RequestMapping(path = "filestone/getContent/{name}/videos", method = RequestMethod.GET)
-	public ResponseEntity<UrlResource> getFullVideo(@PathVariable("name") String name, @Context HttpServletRequest req,
-			HttpSession session) {
+	public ResponseEntity<UrlResource> getFullVideo(@PathVariable("name") String name, @Context HttpServletRequest req,HttpSession session) throws FilestoneMediaFileException {
 		return filestoneServiceManager.getVideoContent(name, req, session);
 	}
 }

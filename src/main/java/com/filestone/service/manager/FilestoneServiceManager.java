@@ -20,27 +20,20 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.filestone.entity.FileInfo;
 import com.filestone.entity.UserDetail;
 import com.filestone.entity.Users;
-import com.filestone.pojo.LoginError;
+import com.filestone.handler.FilestoneMediaFileException;
 import com.filestone.pojo.Message;
 import com.filestone.pojo.RepositoryInfo;
 import com.filestone.service.FileinfoService;
-import com.filestone.service.SecurityService;
-import com.filestone.service.UserService;
-import com.filestone.service.impl.AccessTokenServiceImpl;
 import com.filestone.service.impl.EmailServiceImpl;
 import com.filestone.util.AppUtil;
 import com.filestone.util.Constants;
 import com.filestone.util.FileUploadUtil;
-import com.filestone.util.UserValidator;
 
 /**
  * A service manager class that will handle the Business-Logic for
@@ -157,9 +150,13 @@ public class FilestoneServiceManager {
 		return Response.status(200).entity(preview).build();
 	}
 
-	public ResponseEntity<UrlResource> getVideoContent(String name, HttpServletRequest req, HttpSession session) {
+	public ResponseEntity<UrlResource> getVideoContent(String name, HttpServletRequest req, HttpSession session) throws FilestoneMediaFileException {
 		Users userDetail = (Users) session.getAttribute(Constants.USER_LOGIN);
 		UrlResource video = null;
+		String requestedMediaFile = Constants.BASE_FILES_FOLDER + userDetail.getUsername() + "/" + name ;
+		if (!FileUploadUtil.isMediaResourceExist(requestedMediaFile)) {
+			throw new FilestoneMediaFileException(Constants.CANNOT_FIND_MEDIA_RESOURCE +", Requested resource: " + requestedMediaFile);
+		}
 		try {
 			video = new UrlResource("file:///" + Constants.BASE_FILES_FOLDER + userDetail.getUsername() + "\\" + name);
 		} catch (MalformedURLException e) {
