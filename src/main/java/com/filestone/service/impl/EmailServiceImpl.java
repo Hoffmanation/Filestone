@@ -155,7 +155,7 @@ private String createResetPasswordTemplate(HttpServletRequest req, String token 
 		String urlToInject =null;
 		String content = null;
 	try {
-		 urlToInject = host+ "/reset.html?token=" + token+ "&email=" + sendConformationMailTo;
+		 urlToInject = host+ "/filestone/reset.html?token=" + token+ "&email=" + sendConformationMailTo;
 		 InputStream is = getClass().getResourceAsStream("/reset-password-mail.html");
 		 content =FileUploadUtil.getEmailTemplateFromClasspath(is) ;
 	} catch (Exception e) {

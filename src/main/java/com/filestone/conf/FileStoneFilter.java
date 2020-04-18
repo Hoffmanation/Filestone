@@ -46,7 +46,7 @@ public class FileStoneFilter extends OncePerRequestFilter {
 			Users userDetail = (Users) session.getAttribute(Constants.USER_LOGIN);
 			if (userDetail != null) {
 				requestUrl = request.getRequestURL().toString();
-				if (!requestUrl.contains("/resources") && !requestUrl.endsWith("index.html")&& !requestUrl.contains("/filestone")) {
+				if (!requestUrl.contains("/resources") && !requestUrl.endsWith("index.html")&& !requestUrl.contains("/fs")) {
 					String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()+ request.getContextPath() + "/index.html";
 					response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 					response.setHeader("Location", url);

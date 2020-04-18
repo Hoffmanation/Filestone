@@ -6,21 +6,21 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import com.filestone.entity.FileInfo;
 import com.filestone.entity.Role;
 import com.filestone.entity.UserDetail;
 import com.filestone.entity.Users;
 import com.filestone.pojo.LoginError;
 import com.filestone.pojo.Message;
-import com.filestone.pojo.RepositoryInfo;
 import com.filestone.pojo.ResetPasswordRequest;
 import com.filestone.service.SecurityService;
 import com.filestone.service.UserService;
 import com.filestone.service.impl.AccessTokenServiceImpl;
+import com.filestone.service.impl.EmailServiceImpl;
 import com.filestone.util.AppUtil;
 import com.filestone.util.Constants;
 import com.filestone.util.FileUploadUtil;
@@ -37,6 +37,8 @@ import com.filestone.util.UserValidator;
  */
 @Service
 public class UserServiceManager {
+	private static final Logger log = Logger.getLogger(EmailServiceImpl.class.getSimpleName());
+ 
 
 	/*
 	 * Spring Dependency Injection
@@ -107,6 +109,7 @@ public class UserServiceManager {
 			userService.createUser(user);
 			return Response.status(200).entity(new Message("Your password has been rest successfully")).build();
 		}
+		log.error("An unauthorized request to reset password has been cought by User: " + user.getUsername() +",with " + resetPasswordRequest) ;
 		return Response.status(401).entity(new Message("*Request not authorized")).build();
 	}
 

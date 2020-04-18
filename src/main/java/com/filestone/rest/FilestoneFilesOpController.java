@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.filestone.entity.FileInfo;
+import com.filestone.handler.FilestoneMediaFileException;
 import com.filestone.pojo.RepositoryInfo;
 import com.filestone.service.manager.FilestoneServiceManager;
 
@@ -43,58 +44,57 @@ public class FilestoneFilesOpController {
 	private FilestoneServiceManager filestoneServiceManager;
 
 	
-	@RequestMapping(path = "filestone/uploadFile", method = RequestMethod.POST, consumes = {
+	@RequestMapping(path = "fs/uploadFile", method = RequestMethod.POST, consumes = {
 			MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public Response upload(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpSession session) {
 		return filestoneServiceManager.upload(file, request, session);
 	}
 
-	@RequestMapping(path = "filestone/createFileInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "fs/createFileInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response regiesterFile(@RequestBody FileInfo fileInfoRes, HttpSession session, HttpServletRequest request) {
 		return filestoneServiceManager.createFileInfo(fileInfoRes, session, request);
 
 	}
 
-	@RequestMapping(value = "filestone/downloadFile/{num}", method = RequestMethod.GET)
+	@RequestMapping(value = "fs/downloadFile/{num}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> downloadFile(HttpServletResponse response, @PathVariable("num") String num,
 			HttpSession session) throws IOException {
 		return filestoneServiceManager.downloadFile(response, num, session);
 
 	}
 
-	@RequestMapping(path = "filestone/getRepositoryInfo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "fs/getRepositoryInfo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response getRepositoryInfo(HttpSession session) {
 		return filestoneServiceManager.getRepositoryInfo(session);
 
 	}
 
-	@RequestMapping(path = "filestone/getAllFiles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "fs/getAllFiles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public FileInfo[] getAllFiles(HttpSession session) {
 		return filestoneServiceManager.getAllFiles(session);
 	}
 
-	@RequestMapping(value = "filestone/deleteFile/{num}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "fs/deleteFile/{num}", method = RequestMethod.DELETE)
 	public Response deleteFile(HttpServletResponse response, @PathVariable("num") String num, HttpSession session)
 			throws IOException {
 		return filestoneServiceManager.deleteFile(response, num, session);
 	}
 
-	@RequestMapping(value = "filestone/forgotMyPassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+	@RequestMapping(value = "fs/forgotMyPassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
 	public Response sendConformationMailTo(@RequestBody String sendConformationMailTo, @Context HttpServletResponse res,
 			HttpServletRequest req ,HttpSession session) {
 		return filestoneServiceManager.sendResetPasswordMail(sendConformationMailTo, res,req, session);
 
 	}
 
-	@RequestMapping(path = "filestone/getPreviewTag/{id}", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+	@RequestMapping(path = "fs/getPreviewTag/{id}", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
 	public Response getPreviewTag(@PathVariable("id") String id, @Context HttpServletRequest req, HttpSession session) {
 		return filestoneServiceManager.getPreviewTag(id, req, session);
 
 	}
 
-	@RequestMapping(path = "filestone/getContent/{name}/videos", method = RequestMethod.GET)
-	public ResponseEntity<UrlResource> getFullVideo(@PathVariable("name") String name, @Context HttpServletRequest req,
-			HttpSession session) {
+	@RequestMapping(path = "fs/getContent/{name}/videos", method = RequestMethod.GET)
+	public ResponseEntity<UrlResource> getFullVideo(@PathVariable("name") String name, @Context HttpServletRequest req,HttpSession session) throws FilestoneMediaFileException {
 		return filestoneServiceManager.getVideoContent(name, req, session);
 	}
 }

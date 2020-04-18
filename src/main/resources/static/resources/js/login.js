@@ -12,7 +12,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 		/**
 		 * Global variables
 		 */
-		$scope.restUrl = $location.protocol() + '://'+ $location.host() +':'+  $location.port()+"/filestone" ;
+		$scope.restUrl = $location.protocol() + '://'+ $location.host() +':'+  $location.port()+"/filestone/fs" ;
 		$scope.url = $location.protocol() + '://'+ $location.host() +':'+  $location.port() ;
 		var token = $cookies['XSRF-TOKEN'];
 		$scope.dupPass="";
@@ -22,6 +22,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 		$scope.passNotEnChars="";
 		$scope.resetPasswrodError="";
 		$scope.resetPasswrodResponse="";
+		$scope.appName="filestone";
 		$scope.loader = true ;
 					
 					
@@ -44,7 +45,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 		}
 	    
 	    $scope.goTo = function(page) {
-	    	$window.location.href = '/' + page+'.html';
+	    	$window.location.href =  '/' + $scope.appName+ '/' +page+'.html';
 	    }
 		
 	    //Login 
@@ -68,7 +69,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 				}
 			}).success(function(response, data, status, headers,config) {
 						if (response.status ==200) {
-							$window.location.href = '/index.html';
+							$window.location.href = '/' + $scope.appName+ '/index.html';
 						}
 						else if (response.status ==401){
 							$scope.loginMessage = response.entity ;							
@@ -76,7 +77,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 						$scope.loader = true ;
 			}).error(function(response, data, status, headers,config) {
 						if(response.status == 403){
-							$window.location.href = '/login.html';
+							$window.location.href = '/' + $scope.appName+ '/login.html';
 						}
 						$scope.errorMessage = response.entity ;
 						$scope.loader = true ;
@@ -106,7 +107,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 				}
 			}).success(function(response, data, status, headers,config) {
 						if (response.status ==200) {
-							$window.location.href = '/index.html';
+							$window.location.href = '/' + $scope.appName+ '/index.html';
 						}
 						else if (response.status ==401){
 							$scope.notEmpty	= response.entity.notEmpty ;
@@ -119,7 +120,7 @@ loginApp.controller("loginAppController",function($scope, $http, $rootScope, $wi
 						$scope.loader = true ;
 		   }).error(function(response, data, status, headers,config) {
 						if(response.status == 403){
-							$window.location.href = '/registration.html';
+							$window.location.href = '/' + $scope.appName+ '/registration.html';
 						}
 						$scope.errorMessage = response.entity ;
 						$scope.loader = true ;

@@ -32,23 +32,23 @@ public class FilestoneAppController {
 	@Autowired
 	private UserServiceManager userServiceManager;
 
-	@RequestMapping(path = "filestone/registration", method = RequestMethod.POST)
+	@RequestMapping(path = "fs/registration", method = RequestMethod.POST)
 	public Response registration(@RequestBody(required = true) UserDetail userDetail, BindingResult bindingResult,HttpSession session) {
 		return userServiceManager.registration(userDetail, bindingResult, session);
 	}
 
-	@RequestMapping(path = "filestone/login", method = RequestMethod.POST)
+	@RequestMapping(path = "fs/login", method = RequestMethod.POST)
 	public Response login(@RequestBody UserDetail userDetail, HttpSession session) {
 		return userServiceManager.login(userDetail, session);
 	} 
 	
-	@RequestMapping(path = "filestone/updatePassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+	@RequestMapping(path = "fs/updatePassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
 	public Response updatePassword(@RequestBody ResetPasswordRequest ResetPasswordRequest ,@Context HttpServletRequest req, HttpSession session) {
 		return userServiceManager.updatePassword(ResetPasswordRequest, req, session);
 	}
 	
 	
-	@RequestMapping(path = "filestone/logout", method = RequestMethod.GET)
+	@RequestMapping(path = "fs/logout", method = RequestMethod.GET)
 	public Response logout(HttpSession session) {
 		return userServiceManager.logout( session);
 	}

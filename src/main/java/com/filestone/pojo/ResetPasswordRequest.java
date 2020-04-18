@@ -49,7 +49,11 @@ public class ResetPasswordRequest {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
-	
-	
 
+
+	@Override
+	public String toString() {
+		return "ResetPasswordRequest [token=" + token + ", email=" + email + ", newPassword=" + newPassword + "]";
+	}
+	
 }

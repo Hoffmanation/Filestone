@@ -2,7 +2,7 @@
 	fileStone.controller("fileStoneController", function($compile,$scope, $http,$rootScope, $window, fileReader ,$location,$timeout,$cookies) {
 
 		//Initialize variables
-		$scope.restUrl =$location.protocol() + '://'+ $location.host() +':'+  $location.port()+"/filestone/";
+		$scope.restUrl =$location.protocol() + '://'+ $location.host() +':'+  $location.port()+"/filestone/fs/";
 		var token = $cookies['XSRF-TOKEN'];
 		$scope.printAllFiles = [];
 		$scope.errorMessage ;
@@ -12,6 +12,7 @@
 		jQuery('#error').hide();
 		$scope.tag="";
 		$scope.sortField = 'fileName' ;
+		$scope.appName="filestone";
 		$scope.space = ' ' ;
 		$scope.reverse =true ; 
 		$scope.progress = 0;
@@ -316,10 +317,10 @@
 				}
 			})
 			.success(function(response) {
-				$window.location.href = '/login.html';
+				$window.location.href = '/' + $scope.appName+ '/login.html';
 			})
 			.error(function() {
-				$window.location.href = '/login.html';
+				$window.location.href = '/' + $scope.appName+ '/login.html';
 			});
 		};
 		

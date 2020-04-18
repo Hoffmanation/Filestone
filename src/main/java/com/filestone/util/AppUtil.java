@@ -3,13 +3,13 @@ package com.filestone.util;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +25,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -72,8 +71,7 @@ public class AppUtil {
 			Users userDetail = userStub.getUserById(userId);
 			Path path = new File(Constants.BASE_FILES_FOLDER + userDetail.getUsername() + "//" + fileName).toPath();
 			byte[] array = Files.readAllBytes(path);
-			byte[] encodeBase64 = Base64.encodeBase64(array);
-			String base64DataString = new String(encodeBase64, "UTF-8");
+			String base64DataString = Base64.getEncoder().encodeToString(array);
 
 			if (Arrays.asList(Constants.pdfFileExtention).contains(fileExtention.toLowerCase())) {
 				return "<img style=\"width: auto;\"  ng-src=\"data:image/JPEG;base64,"+ getPdfAsImg(userDetail, fileName) + "\">";
@@ -92,9 +90,10 @@ public class AppUtil {
 			}
 
 			else if (Arrays.asList(Constants.videoFileExtention).contains(fileExtention.toLowerCase())) {
-				return "<video class=\"video-content\" controls><source src=\"/filestone/getContent/"+fileName+"/videos\" type=\"video/mp4\"></video>";
+				return "<video class=\"video-content\" controls><source src=\"/filestone/fs/getContent/"+fileName+"/videos\" type=\"video/mp4\"></video>";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return "<div style=\"color: red;\"><h2>Preview is not available for this file type.</h2></div>";

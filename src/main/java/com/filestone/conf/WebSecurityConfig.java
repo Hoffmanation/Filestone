@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	  http
     	     .authorizeRequests()
     	     	 //Permit all HTTP requests that trying to get a static resource (besides index.html) 
-    	         .antMatchers("/resources/**", "/registration.html" ,"/reset.html","/filestone/**" ,"/static/**").permitAll() 
+    	         .antMatchers("/resources/**", "/registration.html" ,"/reset.html","/fs/**" ,"/static/**").permitAll() 
     	         //Authenticate every HTTP request that trying to get to the main application page (index.html) by checking ROLE-USER
     	         .antMatchers("/index.html").hasRole("USER")
     	         .anyRequest().authenticated()
