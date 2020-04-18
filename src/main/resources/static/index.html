@@ -64,7 +64,7 @@
 								<tr class="row100 body" ng-repeat="file in printAllFiles | filter:query | orderBy:sortField:reverse">
 								 
 								    <td class="cell100 column0"><a href=""><i class="fa fa-trash" ng-click="deleteFile(file.id)"></i></a></td>
-									<td class="cell100 column1"><a href="/filestone/downloadFile/{{file.id}}">{{file.fileName}}</a></td>
+									<td class="cell100 column1"><a href="/filestone/fs/downloadFile/{{file.id}}">{{file.fileName}}</a></td>
 									<td class="cell100 column2">{{file.type}}</td>
 									<td class="cell100 column3">{{file.uploadTime}}</td>
 									<td class="cell100 column4">{{file.description}}</td>
